@@ -1,28 +1,28 @@
 import { useEffect } from "react";
-const PageSearch = ({
-  setSearchedRepo,
-  setUserInput,
-  userInput,
-  getAPIdata,
-  searchedRepo,
-}) => {
-  const handleSearch = (input) => {
-    setSearchedRepo(`https://api.github.com/repos/${input}`);
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+const PageSearch = ({ setSearchedRepo, getAPIdata, searchedRepo }) => {
+  const formSchema = yup.object().shape({
+    input: yup.string().required("Campo não pode estar em branco"),
+  });
+  const { register, handleSubmit } = useForm({
+    resolver: yupResolver(formSchema),
+  });
+  const onSubmitFunction = (data) => {
+    getAPIdata(`https://api.github.com/repos/${data.input}`);
   };
-  useEffect(() => {
-    if (searchedRepo) {
-      getAPIdata(searchedRepo);
-    }
-  }, [searchedRepo]);
+
   return (
     <>
-      <input
-        type="text"
-        onChange={(e) => setUserInput(e.target.value)}
-        placeholder="Search repository"
-        value={userInput}
-      />
-      <button onClick={() => handleSearch(userInput)}>Search</button>
+      <form onSubmit={handleSubmit(onSubmitFunction)}>
+        <input
+          type="text"
+          placeholder="Search repository"
+          {...register("input")}
+        />
+        <button type="submit">Search</button>
+      </form>
     </>
   );
 };

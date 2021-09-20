@@ -8,7 +8,6 @@ function App() {
   const [userInput, setUserInput] = useState("");
   const [searchedRepo, setSearchedRepo] = useState("");
   const getAPIdata = (address) => {
-    console.log(address);
     fetch(address)
       .then((response) => response.json())
       .then((response) => setApiSearch(response))
@@ -20,8 +19,6 @@ function App() {
       <PageSearch
         setSearchedRepo={setSearchedRepo}
         searchedRepo={searchedRepo}
-        setUserInput={setUserInput}
-        userInput={userInput}
         getAPIdata={getAPIdata}
       />
       {apiSearch && <APIRender apiSearch={apiSearch} />}
