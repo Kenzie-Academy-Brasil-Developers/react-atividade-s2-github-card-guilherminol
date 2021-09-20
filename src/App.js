@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import PageSearch from "./components/PageSearch";
+import APIRender from "./components/APIRender";
+import { useState } from "react";
 
 function App() {
+  const [apiSearch, setApiSearch] = useState({});
+  const [userInput, setUserInput] = useState("");
+  const [searchedRepo, setSearchedRepo] = useState("");
+  const getAPIdata = (address) => {
+    console.log(address);
+    fetch(address)
+      .then((response) => response.json())
+      .then((response) => setApiSearch(response))
+      .catch((error) => alert(error));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <PageSearch
+        setSearchedRepo={setSearchedRepo}
+        searchedRepo={searchedRepo}
+        setUserInput={setUserInput}
+        userInput={userInput}
+        getAPIdata={getAPIdata}
+      />
+      {apiSearch && <APIRender apiSearch={apiSearch} />}
+    </>
   );
 }
 
